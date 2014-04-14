@@ -17,24 +17,24 @@ typedef struct
     
 } ISColorWheelPixelRGB;
 
-static float ISColorWheel_PointDistance (CGPoint p1, CGPoint p2)
+static CGFloat ISColorWheel_PointDistance (CGPoint p1, CGPoint p2)
 {
     return sqrtf((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
 }
 
 
-static ISColorWheelPixelRGB ISColorWheel_HSBToRGB (float h, float s, float v)
+static ISColorWheelPixelRGB ISColorWheel_HSBToRGB (CGFloat h, CGFloat s, CGFloat v)
 {
     h *= 6.0f;
     int i = floorf(h);
-    float f = h - (float)i;
-    float p = v *  (1.0f - s);
-    float q = v * (1.0f - s * f);
-    float t = v * (1.0f - s * (1.0f - f));
+    CGFloat f = h - (CGFloat)i;
+    CGFloat p = v *  (1.0f - s);
+    CGFloat q = v * (1.0f - s * f);
+    CGFloat t = v * (1.0f - s * (1.0f - f));
     
-    float r;
-    float g;
-    float b;
+    CGFloat r;
+    CGFloat g;
+    CGFloat b;
     
     switch (i)
     {
@@ -240,9 +240,9 @@ NS_INLINE unsigned char RoundClamp(unsigned char value, int rounding, int margin
     int result;
     int halfRounding = rounding/2;
     if (offset < margin) {
-        result = base + round(((float)offset/(float)margin) * halfRounding);
+        result = base + round(((CGFloat)offset/(CGFloat)margin) * halfRounding);
     } else if ((rounding - offset) < margin) {
-        result = base + rounding - round(((float)(rounding - offset)/(float)margin) * halfRounding);
+        result = base + rounding - round(((CGFloat)(rounding - offset)/(CGFloat)margin) * halfRounding);
     } else {
         result = base + halfRounding;
     }
@@ -256,10 +256,10 @@ NS_INLINE unsigned char RoundClamp(unsigned char value, int rounding, int margin
 
 - (ISColorWheelPixelRGB)colorAtPoint:(CGPoint)point forDisplay:(BOOL)forDisplay
 {
-    float angle = atan2(point.x - _imageCenter.x, point.y - _imageCenter.y) + M_PI;
-    float dist = ISColorWheel_PointDistance(point, _imageCenter);
+    CGFloat angle = atan2(point.x - _imageCenter.x, point.y - _imageCenter.y) + M_PI;
+    CGFloat dist = ISColorWheel_PointDistance(point, _imageCenter);
     
-    float hue = angle / M_DOUBLE_PI;
+    CGFloat hue = angle / M_DOUBLE_PI;
     
     if (_hueCount > 0.0) {
         hue = round(hue * _hueCount) / _hueCount;
@@ -276,12 +276,12 @@ NS_INLINE unsigned char RoundClamp(unsigned char value, int rounding, int margin
     hue = MIN(hue, 1.0f - .0000001f);
     hue = MAX(hue, 0.0f);
     
-    float sat = dist / (_radius);
+    CGFloat sat = dist / (_radius);
     
     sat = MIN(sat, 1.0);
     sat = MAX(sat, 0.0);
     
-    float brightness;
+    CGFloat brightness;
     if (_swapSaturationAndBrightness) {
         brightness = sat;
         sat = _brightness;
@@ -301,7 +301,7 @@ NS_INLINE unsigned char RoundClamp(unsigned char value, int rounding, int margin
     sat = MAX(sat, 0.0);
     
     if (_saturationMinimum > 0.0 || _saturationMaximum < 1.0) {
-        float satMin = MAX(0.0, _saturationMinimum);
+        CGFloat satMin = MAX(0.0, _saturationMinimum);
         sat = sat * (MIN(1.0f, _saturationMaximum) - satMin) + satMin;
     }
     
@@ -320,7 +320,7 @@ NS_INLINE unsigned char RoundClamp(unsigned char value, int rounding, int margin
 
 - (CGPoint)viewToImageSpace:(CGPoint)point
 {
-    float height = CGRectGetHeight(self.bounds);
+    CGFloat height = CGRectGetHeight(self.bounds);
     
     point.y = height - point.y;
         
@@ -435,10 +435,10 @@ NS_INLINE unsigned char RoundClamp(unsigned char value, int rounding, int margin
     
     if (color == nil || self.superview == nil || _radius <= 0.0f) return;
     
-    float hue = 0.0;
-    float saturation = 0.0;
-    float brightness = 1.0;
-    float alpha = 1.0;
+    CGFloat hue = 0.0;
+    CGFloat saturation = 0.0;
+    CGFloat brightness = 1.0;
+    CGFloat alpha = 1.0;
     
     CGColorSpaceModel colorSpaceModel = CGColorSpaceGetModel(CGColorGetColorSpace(color.CGColor));
     
@@ -476,8 +476,8 @@ NS_INLINE unsigned char RoundClamp(unsigned char value, int rounding, int margin
         }
     }
     
-    float angle = (hue * M_DOUBLE_PI) + M_PI_2;
-    float dist = saturation * _radius;
+    CGFloat angle = (hue * M_DOUBLE_PI) + M_PI_2;
+    CGFloat dist = saturation * _radius;
         
     CGPoint point;
     point.x = _wheelCenter.x + (cosf(angle) * dist);
@@ -545,7 +545,7 @@ NS_INLINE unsigned char RoundClamp(unsigned char value, int rounding, int margin
     }
 }
 
--(void)setHueOffset:(float)hueOffset
+-(void)setHueOffset:(CGFloat)hueOffset
 {
     hueOffset = MIN(1.0f, MAX(0.0f, hueOffset));
     if (_hueOffset != hueOffset) {
@@ -643,7 +643,7 @@ NS_INLINE unsigned char RoundClamp(unsigned char value, int rounding, int margin
         // If so we need to create a drection vector and calculate the constrained point
         CGPoint vec = CGPointMake(point.x - _wheelCenter.x, point.y - _wheelCenter.y);
         
-        float extents = sqrtf((vec.x * vec.x) + (vec.y * vec.y));
+        CGFloat extents = sqrtf((vec.x * vec.x) + (vec.y * vec.y));
         
         vec.x /= extents;
         vec.y /= extents;

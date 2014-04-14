@@ -24,12 +24,12 @@
 @property (nonatomic, assign) int clampRGBAmount;
 @property (nonatomic, assign) int clampRGBMargin;
 
-@property (nonatomic, assign) float hueCount;
-@property (nonatomic, assign) float hueOffset;
+@property (nonatomic, assign) CGFloat hueCount;
+@property (nonatomic, assign) CGFloat hueOffset;
 
-@property (nonatomic, assign) float saturationCount;
-@property (nonatomic, assign) float saturationMinimum;
-@property (nonatomic, assign) float saturationMaximum;
+@property (nonatomic, assign) CGFloat saturationCount;
+@property (nonatomic, assign) CGFloat saturationMinimum;
+@property (nonatomic, assign) CGFloat saturationMaximum;
 
 @property (nonatomic, assign) CGFloat brightness;
 @property (nonatomic, assign) BOOL lockBrightness;
